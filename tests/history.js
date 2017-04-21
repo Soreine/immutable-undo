@@ -1,5 +1,5 @@
 const expect = require('expect');
-const History = require('../');
+const History = require('../lib');
 
 describe('History', () => {
 
@@ -14,10 +14,13 @@ describe('History', () => {
         expect(history.redos.isEmpty()).toBe(true);
     });
 
+    it('should expose strategies', () => {
+        expect(History.SMOOTH).toBe('SMOOTH');
+        expect(History.LRU).toBe('LRU');
+    });
+
     it('should do', () => {
-        const history = History
-                  .create()
-                  .push(0);
+        const history = History.create().push(0);
 
         expect(history.undos.count()).toEqual(1);
         expect(history.redos.count()).toEqual(0);
@@ -66,12 +69,12 @@ describe('History', () => {
         const serie = [...Array(1000).keys()];
         const history = serie.reduce(
             (h, n) => h.push(n),
-            History.create()
+            History.create({ maxUndos: 300 })
         );
 
         expect(history.previous).toEqual(999);
 
-        expect(history.undos.count()).toEqual(500);
+        expect(history.undos.count()).toEqual(300);
         expect(history.redos.count()).toEqual(0);
     });
 });
