@@ -79,7 +79,7 @@ the more recent undos keep a high precision.
 
 You can imagine the density of undos over time becoming more like this curve:
 
-![curve](https://aerotwist.com/static/tutorials/protip-choose-your-ease/ease-in.jpg)
+![curve](https://developers.google.com/web/fundamentals/design-and-ui/animations/images/linear.png)
 
 
 
