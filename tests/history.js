@@ -64,7 +64,7 @@ describe('History', () => {
         expect(history.redos.count()).toEqual(0);
     });
 
-    it('should handle max undo size', () => {
+    it('should handle max undo size, with LRU strategy', () => {
         // Serie of natural integers
         const serie = [...Array(1000).keys()];
         const history = serie.reduce(
@@ -76,5 +76,26 @@ describe('History', () => {
 
         expect(history.undos.count()).toEqual(300);
         expect(history.redos.count()).toEqual(0);
+    });
+
+    it('should handle max undo size, with SMOOTH strategy', () => {
+        // Serie of natural integers
+        const serie = [...Array(30).keys()];
+        const history = serie.reduce(
+            (h, n) => h.push(n),
+            History.create({ maxUndos: 3, strategy: History.SMOOTH })
+        );
+
+        expect(history.previous).toEqual(29);
+
+        expect(history.undos.count()).toEqual(3);
+        expect(history.redos.count()).toEqual(0);
+        expect(
+            history.undos.toArray()
+        ).toEqual([
+            { value: 0, merged: 21 },
+            { value: 21, merged: 8 },
+            { value: 29, merged: 1 }
+        ]);
     });
 });
