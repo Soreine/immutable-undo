@@ -15,7 +15,9 @@ npm install --save immutable-undo
 #### `History.create`
 
 - `{Object} [opts]` Option object
-- `{Number} [opts.maxUndos=500]` Maximum number of undos stored. Beyond that, the oldest undo is dropped.
+- `{Number} [opts.maxUndos=500]` Maximum number of undos stored.
+  Beyond that, some undos are dropped, according to the specified drop strategy.
+- `{ (History) => History } [opts.strategy=History.lru]` The drop strategy. See [strategies](#strategies).
 - `return {History}` An empty history
 
 ``` js
@@ -60,3 +62,27 @@ Pushes a new state on the undo stack, and clears the redo stack
 
 - `{State} current` The current state, that will be pushed on the undo stack
 - `return {History}` The history with the redo stack popped once, and the current state added to redos
+
+### Strategies
+
+These are built-in strategies for keeping the undo stack under its size limit.
+
+#### `History.lru`
+
+Least Recently Used. Simply drops the oldest undo to make room for new one.
+
+#### `History.smooth`
+
+Will always keep the initial state (the first undo), and will drop
+undos such as the oldest undos grow more and more spaced in time, but
+the more recent undos keep a high precision.
+
+You can imagine the density of undos over time becoming more like this curve:
+
+![curve](https://developers.google.com/web/fundamentals/design-and-ui/animations/images/linear.png)
+
+
+
+
+
+
