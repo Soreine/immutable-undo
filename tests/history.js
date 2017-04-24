@@ -98,4 +98,31 @@ describe('History', () => {
             { value: 29, merged: 1 }
         ]);
     });
+
+    it('should handle undo redo, with Smooth strategy', () => {
+        // Serie of natural integers
+        const serie = [...Array(30).keys()];
+        const history = serie.reduce(
+            (h, n) => {
+                h = h.push(n);
+                const previous = h.previous;
+                h = h.undo(n + 1);
+                h = h.redo(previous);
+                return h;
+            },
+            History.create({ maxUndos: 3, strategy: History.smooth })
+        );
+
+        expect(history.previous).toEqual(29);
+
+        expect(history.undos.count()).toEqual(3);
+        expect(history.redos.count()).toEqual(0);
+        expect(
+            history.undos.toArray()
+        ).toEqual([
+            { value: 0, merged: 21 },
+            { value: 21, merged: 8 },
+            { value: 29, merged: 1 }
+        ]);
+    });
 });
