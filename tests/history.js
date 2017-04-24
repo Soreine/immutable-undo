@@ -15,8 +15,8 @@ describe('History', () => {
     });
 
     it('should expose strategies', () => {
-        expect(History.SMOOTH).toBe('SMOOTH');
-        expect(History.LRU).toBe('LRU');
+        expect(History.smooth).toBeA('function');
+        expect(History.lru).toBeA('function');
     });
 
     it('should do', () => {
@@ -78,12 +78,12 @@ describe('History', () => {
         expect(history.redos.count()).toEqual(0);
     });
 
-    it('should handle max undo size, with SMOOTH strategy', () => {
+    it('should handle max undo size, with Smooth strategy', () => {
         // Serie of natural integers
         const serie = [...Array(30).keys()];
         const history = serie.reduce(
             (h, n) => h.push(n),
-            History.create({ maxUndos: 3, strategy: History.SMOOTH })
+            History.create({ maxUndos: 3, strategy: History.smooth })
         );
 
         expect(history.previous).toEqual(29);
