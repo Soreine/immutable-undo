@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/Soreine/immutable-undo#readme",
   "peerDependencies": {
-    "immutable": "^3.8.1 | ^4.0.0-rc.12"
+    "immutable": "^3.8.1 || ^4.0.0-rc.12"
   },
   "devDependencies": {
     "babel-cli": "^6.23.1",
